@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>TypeScript HTML App</title>
+    <script data-main="main.js" src="lib.js"></script>
+</head>
+<body>
+<h1></h1>
+
+<div id="content"></div>
+<script>
+    require(['main'], function(main) {
+        var cl = new main.GameClient();
+    });
+</script>
+</body>
+</html>

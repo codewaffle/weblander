@@ -1,0 +1,38 @@
+{
+  "name": "weblander-client",
+  "version": "1.0.0",
+  "description": "",
+  "dependencies": {},
+  "devDependencies": {
+    "concat": "^1.0.3",
+    "cpx": "^1.5.0",
+    "light-server": "^2.0.2",
+    "mkdirp": "^0.5.1",
+    "mv": "^2.1.1",
+    "npm-run-all": "^4.0.2",
+    "open-simplex-noise": "^1.2.0",
+    "opn": "^5.1.0",
+    "opn-cli": "^3.1.0",
+    "phaser": "^2.6.2",
+    "requirejs": "^2.3.3",
+    "rimraf": "^2.6.1",
+    "typescript": "^2.3.4",
+    "uglify-js": "^3.0.15"
+  },
+  "scripts": {
+    "clean": "rimraf .build && rimraf .dist",
+    "prebuild": "mkdirp .build/server && mkdirp .build/client",
+    "prestart": "run-p build:*",
+    "start": "run-p watch:* serve:client open:client",
+    "build:assets": "cpx assets/**/*.{png,html} .build",
+    "build:lib": "node scripts/build-lib.js",
+    "build:client": "tsc -p src/client",
+    "build:server": "tsc -p src/server",
+    "watch:assets": "cpx -w assets/**/*.{png,html} .build",
+    "watch:client": "tsc -w -p src/client",
+    "watch:server": "tsc -w -p src/server",
+    
+    "serve:client": "light-server -s .build -p 4004",
+    "open:client": "opn http://localhost:4004/client/index.html"
+  }
+}
