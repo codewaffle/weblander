@@ -5,15 +5,13 @@
     <meta charset="utf-8" />
     <title>TypeScript HTML App</title>
     <script src="pixi.js"></script>
-    <script data-main="main.js" src="require.js"></script>
+    <script src="p2.js"></script>
+    <script src="bundle.js"></script>
 </head>
 <body>
-
 <script>
-    require(['main'], function(main) {
-        var cl = new main.GameClient();
-        document.body.appendChild(cl.view);
-    });
+    var cl = new weblander.GameClient();
+    document.body.appendChild(cl.view);
 </script>
 </body>
 </html>
