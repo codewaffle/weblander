@@ -1,37 +1,50 @@
 import Point from "../common/Point"
 import Planetoid from "../common/Planetoid"
-import {PlanetoidDisplay} from "./display"
+import {PlanetoidDisplay, ShipDisplay} from "./display"
 
-export class GameClient {
-    private game: Phaser.Game;
+export class GameClient extends PIXI.Application {
     private planets: Planetoid[];
 
-    constructor() {
-        this.game = new Phaser.Game(1280 / 2, 720 / 2, Phaser.AUTO, "content", {preload: this.preload, create: this.create, update: this.update});
-    }
+    private t : PIXI.Graphics;
 
-    private preload() {
-        this.game.load.image("tiles", "tileset.png");
+    constructor() {
+        super();
     }
 
     private create() {
-        this.game.world.setBounds(-32768, -32768, 32768*2, 32768*2);
-        this.game.camera.focusOnXY(0, 0);
-        this.game.physics.startSystem(Phaser.Physics.P2JS);
-
         this.planets = [];
 
         let t : Point[] = [];
 
         for(let r = 0; r < 2*Math.PI;r+=Math.PI/4) {
-            t.push(new Point(100 * Math.cos(r), 100 * Math.sin(r)));
+            t.push(new Point(512 * Math.cos(r), 512 * Math.sin(r)));
         }
 
         let p = new Planetoid(t);
-        let pd = new PlanetoidDisplay(this.game, p);
-        this.game.add.existing(pd);
+        let pd = this.t = new PlanetoidDisplay(p);
+
+        this.stage.addChild(pd);
+
+        let s = new ShipDisplay(0, -600);
+        this.stage.addChild(s);
+
+        this.stage.scale.set(0.2, 0.2);
+
+        // this.game.camera.scale.setTo(2);
+        // this.game.camera.follow(s, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
     }
 
     update() {
+        let dt = 1/(this.ticker.FPS * this.ticker.deltaTime);
+
+        this.stage.pivot.set(this.t.x, this.t.y);
+        this.stage.position.set(this.renderer.width/2, this.renderer.height/2);
+        this.stage.scale.set(0.5);
+    }
+
+    public start() {
+        super.start();
+        this.create();
+        this.ticker.add(() => this.update());
     }
 }

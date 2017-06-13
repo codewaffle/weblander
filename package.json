@@ -4,6 +4,7 @@
   "description": "",
   "dependencies": {},
   "devDependencies": {
+    "@types/pixi.js": "^4.5.0",
     "concat": "^1.0.3",
     "cpx": "^1.5.0",
     "light-server": "^2.0.2",
@@ -13,7 +14,7 @@
     "open-simplex-noise": "^1.2.0",
     "opn": "^5.1.0",
     "opn-cli": "^3.1.0",
-    "phaser": "^2.6.2",
+    "pixi.js": "^4.5.3",
     "requirejs": "^2.3.3",
     "rimraf": "^2.6.1",
     "typescript": "^2.3.4",
@@ -25,13 +26,12 @@
     "prestart": "run-p build:*",
     "start": "run-p watch:* serve:client open:client",
     "build:assets": "cpx assets/**/*.{png,html} .build",
-    "build:lib": "node scripts/build-lib.js",
+    "build:lib": "cpx node_modules/pixi.js/dist/pixi.js .build/client && cpx node_modules/requirejs/require.js .build/client",
     "build:client": "tsc -p src/client",
     "build:server": "tsc -p src/server",
     "watch:assets": "cpx -w assets/**/*.{png,html} .build",
     "watch:client": "tsc -w -p src/client",
     "watch:server": "tsc -w -p src/server",
-    
     "serve:client": "light-server -s .build -p 4004",
     "open:client": "opn http://localhost:4004/client/index.html"
   }

@@ -1,47 +1,65 @@
 import Point from "../common/Point"
 import Planetoid from "../common/Planetoid"
 
-export class PlanetoidDisplay extends Phaser.Sprite {
+export class PlanetoidDisplay extends PIXI.Graphics {
     private planetoid : Planetoid;
-    private graphics : Phaser.Graphics;
 
-    constructor(game: Phaser.Game, planetoid: Planetoid) {
-        super(game, 0, 0);
-        this.position = new Phaser.Point(planetoid.X, planetoid.Y);
+    constructor(planetoid: Planetoid) {
+        super();
 
         this.planetoid = planetoid;
-        let graphics = this.graphics = new Phaser.Graphics(game);
-
-        planetoid.TerrainPoints[0].X = 0; 
-        planetoid.TerrainPoints[0].Y /= 2;
+        let graphics = this;
 
         // both arrays are sourced from planetoid.TerrainPoints
-        let phaserPoints : Phaser.Point[] = [];
+        let pPoints : PIXI.Point[] = [];
+
         for(let p of planetoid.TerrainPoints) {
-            phaserPoints.push(new Phaser.Point(p.X, p.Y));
+            pPoints.push(new PIXI.Point(p.X, p.Y));
         }
-        phaserPoints.push(phaserPoints[0]);
-        graphics.lineStyle(5, 0xFF33FF);
-        graphics.drawPolygon(phaserPoints);
+        pPoints.push(pPoints[0]);
+
+        graphics.lineStyle(2, 0x888888);
+        graphics.drawPolygon(pPoints);
 
         let pointPairs : number[][] = []; // array of points, [[0, 0], [1, 1], ...]
         for(let p of planetoid.TerrainPoints) {
             pointPairs.push([p.X, p.Y]);
         }
-        game.physics.p2.enable(this, true);
-        this.body.clearShapes();
-        this.body.data.adjustCenterOfMass = function() {}
-        this.body.addPolygon(null, pointPairs);
 
-        this.addChild(graphics);
-    }
+        // game.physics.p2.enable(this, true);
+        // this.body.clearShapes();
+        // this.body.data.adjustCenterOfMass = function() {}
+        // this.body.addPolygon(null, pointPairs);
 
-    update() {
-        this.body.angle += 1;
+        // this.addChild(graphics);
     }
 }
 
-export class ShipDisplay extends Phaser.Graphics {
-    test() {
+export class ShipDisplay extends PIXI.Graphics {
+    constructor(x: number, y: number) {
+        super()
+
+        let g = this;
+
+        let poly = [
+            -5, 5,
+            0, -5,
+            5, 5
+        ];
+
+        g.lineStyle(1, 0xDDDDDD);
+        g.drawPolygon(poly);
+
+        // game.physics.p2.enable(this, true);
+        // this.body.clearShapes();
+
+        // this.body.data.adjustCenterOfMass = function() {};
+        // this.body.addPolygon(null, poly);
+
+        // this.addChild(g);
+    }
+
+    update() {
+        // this.body.velocity.y += 9.81 * this.game.time.physicsElapsed;
     }
 }

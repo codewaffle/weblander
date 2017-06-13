@@ -14,7 +14,7 @@
     "suppressImplicitAnyIndexErrors": true
   },
   "include": [
-    "../../node_modules/phaser/typescript/phaser.comments.d.ts",
+    "../../node_modules/@types/**/*.d.ts",
     "main.ts"
   ]
 }
