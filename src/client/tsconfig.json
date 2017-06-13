@@ -16,7 +16,5 @@
   "include": [
     "../../node_modules/phaser/typescript/phaser.comments.d.ts",
     "main.ts"
-    // "../common/**/*",
-    // "**/*"
   ]
 }
