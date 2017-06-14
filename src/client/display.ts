@@ -1,5 +1,7 @@
+import {Body} from 'p2'
 import Point from "../common/Point"
 import Planetoid from "../common/Planetoid"
+import { IOnRender } from "../common/interfaces";
 
 export class PlanetoidDisplay extends PIXI.Graphics {
     private planetoid : Planetoid;
@@ -18,7 +20,7 @@ export class PlanetoidDisplay extends PIXI.Graphics {
         }
         pPoints.push(pPoints[0]);
 
-        graphics.lineStyle(2, 0x888888);
+        graphics.lineStyle(8, 0x888888);
         graphics.drawPolygon(pPoints);
 
         let pointPairs : number[][] = []; // array of points, [[0, 0], [1, 1], ...]
@@ -35,31 +37,28 @@ export class PlanetoidDisplay extends PIXI.Graphics {
     }
 }
 
-export class ShipDisplay extends PIXI.Graphics {
-    constructor(x: number, y: number) {
+export class ShipDisplay extends PIXI.Graphics implements IOnRender {
+    private body: Body;
+
+    constructor(body : Body) {
         super()
+        this.body = body;
 
         let g = this;
 
         let poly = [
-            -5, 5,
-            0, -5,
-            5, 5
+            -8, 8,
+            0, -8,
+            8, 8
         ];
 
         g.lineStyle(1, 0xDDDDDD);
         g.drawPolygon(poly);
-
-        // game.physics.p2.enable(this, true);
-        // this.body.clearShapes();
-
-        // this.body.data.adjustCenterOfMass = function() {};
-        // this.body.addPolygon(null, poly);
-
-        // this.addChild(g);
     }
 
-    update() {
-        // this.body.velocity.y += 9.81 * this.game.time.physicsElapsed;
+    onRender(dt: number): void {
+        this.position.set(this.body.interpolatedPosition[0], this.body.interpolatedPosition[1]);
+        this.rotation = this.body.interpolatedAngle;
     }
+
 }

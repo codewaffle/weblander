@@ -32,7 +32,7 @@
     "build:server": "tsc -p src/server",
     "watch:assets": "cpx -w assets/**/*.{png,html} .build",
     "watch:clientsrc": "tsc -w -p src/client",
-    "watch:clientbundle": "rollup .build/client/main.js --format iife --output .build/client/bundle.js --name weblander -w",
+    "watch:clientbundle": "rollup .build/client/main.js --format iife --output .build/client/bundle.js --name weblander --external p2 -w -m",
     "watch:server": "tsc -w -p src/server",
     "serve:client": "light-server -s .build -p 4004",
     "open:client": "opn http://localhost:4004/client/index.html"
