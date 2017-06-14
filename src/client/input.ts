@@ -1,13 +1,13 @@
 // from https://github.com/kittykatattack/learningPixi#keyboard
 
-function keyboard(keyCode) {
+function keyboard(keyCode : number) {
   var key = {
       code: keyCode,
       isDown: false,
       isUp: true,
-      press: undefined,
-      release: undefined,
-      downHandler: function(event) {
+      press: function(){},
+      release: function(){},
+      downHandler: function(event : any) {
         if (event.keyCode === key.code) {
             if (key.isUp && key.press) key.press();
             key.isDown = true;
@@ -15,7 +15,7 @@ function keyboard(keyCode) {
         }
         event.preventDefault();
       },
-      upHandler: function(event) {
+      upHandler: function(event : any) {
         if (event.keyCode === key.code) {
             if (key.isDown && key.release) key.release();
             key.isDown = false;

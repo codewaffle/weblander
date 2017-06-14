@@ -1,4 +1,4 @@
-import {World} from 'p2'
+import {World, vec2, Material, ContactMaterial} from 'p2'
 import Point from "../common/Point"
 import Planetoid from "../common/Planetoid"
 import {PlanetoidDisplay, ShipDisplay} from "./display"
@@ -31,8 +31,11 @@ export class GameClient extends PIXI.Application implements IOnRender, IOnFixedU
 
     private create() {
         this.world = new World({
-            gravity: [0, 9.81]
+            gravity: [0, 0]
         });
+
+        this.world.applyDamping = false;
+        this.world.applyGravity = false;
 
         this.planets = [];
 
@@ -71,7 +74,7 @@ export class GameClient extends PIXI.Application implements IOnRender, IOnFixedU
 
     onFixedUpdate(dt: number): void {
         if(Input.Thrust.isDown) {
-            this.b.force = [0, -400];
+            this.b.setThrust(-400);
         }
 
         if(Input.Left.isDown) {
@@ -81,6 +84,16 @@ export class GameClient extends PIXI.Application implements IOnRender, IOnFixedU
         if(Input.Right.isDown) {
             this.b.angle += dt * 4;
         }
+
+        let _mass = 100000;
+
+        let mag = _mass/vec2.sqrLen(this.b.position);
+        let grav = [0, 0];
+
+        vec2.normalize(grav, this.b.position);
+        vec2.scale(grav, grav, -mag * dt);
+
+        vec2.add(this.b.velocity, this.b.velocity, grav);
     }
 
     public run() {
@@ -88,7 +101,7 @@ export class GameClient extends PIXI.Application implements IOnRender, IOnFixedU
 
         let lastTime : number = null;
 
-        let fixedRate = 1/10;
+        let fixedRate = 1/20;
 
         this.world.on("postStep", () => {
             for(var obj of this.onFixedUpdaters) {
