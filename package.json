@@ -17,6 +17,7 @@
     "pixi.js": "^4.5.3",
     "rimraf": "^2.6.1",
     "rollup": "^0.43.0",
+    "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-watch": "^4.0.0",
     "typescript": "^2.3.4",
     "uglify-js": "^3.0.15"
@@ -29,12 +30,14 @@
     "build:assets": "cpx assets/**/*.{png,html} .build",
     "build:lib": "cpx node_modules/pixi.js/dist/pixi.js .build/client && cpx node_modules/p2/build/p2.js .build/client",
     "build:client": "tsc -p src/client",
+    "build:clientbundle": "rollup -c",
     "build:server": "tsc -p src/server",
     "watch:assets": "cpx -w assets/**/*.{png,html} .build",
     "watch:clientsrc": "tsc -w -p src/client",
-    "watch:clientbundle": "rollup .build/client/main.js --format iife --output .build/client/bundle.js --name weblander --external p2 -w -m",
+    "watch:clientbundle": "rollup -c -w",
     "watch:server": "tsc -w -p src/server",
     "serve:client": "light-server -s .build -p 4004",
-    "open:client": "opn http://localhost:4004/client/index.html"
+    "open:client": "opn http://localhost:4004/client/index.html",
+    "rollup": "rollup"
   }
 }

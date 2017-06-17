@@ -1,7 +1,5 @@
-import {Body} from 'p2'
-import Point from "../common/Point"
-import Planetoid from "../common/Planetoid"
-import { IOnRender } from "../common/interfaces";
+import {Body, vec2} from 'p2'
+import {Planetoid, IOnRender} from "../common"
 
 export class PlanetoidDisplay extends PIXI.Graphics {
     private planetoid : Planetoid;
@@ -28,6 +26,8 @@ export class PlanetoidDisplay extends PIXI.Graphics {
 
 export class ShipDisplay extends PIXI.Graphics implements IOnRender {
     private body: Body;
+    public _orbit : PIXI.Graphics; // TODO : fix this, should be private
+    
 
     constructor(body : Body) {
         super()
@@ -46,11 +46,34 @@ export class ShipDisplay extends PIXI.Graphics implements IOnRender {
         g.beginFill(0x884422);
         g.drawPolygon(poly);
         g.endFill();
+
+        this._orbit = new PIXI.Graphics();
     }
 
     onRender(dt: number): void {
         this.position.set(this.body.interpolatedPosition[0], this.body.interpolatedPosition[1]);
         this.rotation = this.body.interpolatedAngle;
+
+        this.updateOrbitPrediction();
+    }
+
+    updateOrbitPrediction(): void {
+        this._orbit.clear();
+        
+        this._orbit
+            .moveTo(this.position.x, this.position.y);
+
+        let pos = vec2.clone(this.body.position);
+        let vel = vec2.clone(this.body.velocity);
+
+        let scratch : number[] = [0, 0];
+
+        for(var i=0;i<50;++i) {
+            // vec2.add(pos, pos, )
+            this._orbit
+                .lineStyle(4, 0xffffff)
+                .lineTo(0, 0);
+        }
     }
 
 }

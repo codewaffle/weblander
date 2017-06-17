@@ -1,7 +1,7 @@
 import {Body} from 'p2'
 import Point from "./Point"
 
-export default class Planetoid extends Body {
+export class Planetoid extends Body {
     private terrainPoints : number[][];
 
     public get TerrainPoints() : number[][] {

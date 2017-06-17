@@ -1,9 +1,6 @@
-import {World, vec2, Material, ContactMaterial} from 'p2'
-import Point from "../common/Point"
-import Planetoid from "../common/Planetoid"
+import {vec2, Material, ContactMaterial} from 'p2'
+import {World, Planetoid, Ship, IOnRender,IOnFixedUpdate} from "../common"
 import {PlanetoidDisplay, ShipDisplay} from "./display"
-import Ship from "../common/Ship"
-import {IOnRender,IOnFixedUpdate} from "../common/interfaces"
 
 import * as Input from "./input"
 
@@ -58,6 +55,9 @@ export class GameClient extends PIXI.Application implements IOnRender, IOnFixedU
         
         let s = new ShipDisplay(ship);
         this.stage.addChild(s);
+
+        // eugh, TODO: fix this
+        this.stage.addChild(s._orbit);
 
         this.t = s;
 
