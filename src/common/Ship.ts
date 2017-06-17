@@ -3,10 +3,14 @@ import {Body, Box} from 'p2';
 export default class Ship extends Body {
     constructor() {
         super({
-            mass: 10
+            mass: 10,
+            fixedRotation: true
         });
 
-        this.addShape(new Box());
+        this.addShape(new Box({
+            width: 16,
+            height: 16
+        }));
     }
 
     public setThrust(amount : number) {

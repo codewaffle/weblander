@@ -1,23 +1,20 @@
+import {Body} from 'p2'
 import Point from "./Point"
 
-export default class Planetoid {
-    private position : Point;
-    private terrain : Point[];
+export default class Planetoid extends Body {
+    private terrainPoints : number[][];
 
-    public get TerrainPoints() : Point [] {
-        return this.terrain;
+    public get TerrainPoints() : number[][] {
+        return this.terrainPoints;
     }
 
-    get X(): number {
-        return this.position.X;
-    }
+    constructor(terrain : number[][]) {
+        super({
+            mass: 0,
+            fixedRotation: true
+        });
 
-    get Y(): number{
-        return this.position.Y;
-    }
-
-    constructor(terrain : Point[]) {
-        this.position = new Point();
-        this.terrain = terrain;
+        this.terrainPoints = terrain;
+        this.fromPolygon(terrain);
     }
 }

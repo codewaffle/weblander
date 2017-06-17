@@ -31,18 +31,20 @@ export class GameClient extends PIXI.Application implements IOnRender, IOnFixedU
 
     private create() {
         this.world = new World({
-            gravity: [0, 0]
+            gravity: [0, 0],
         });
+
 
         this.world.applyDamping = false;
         this.world.applyGravity = false;
+        this.world.defaultContactMaterial.friction = 0.8;
 
         this.planets = [];
 
-        let t : Point[] = [];
+        let t : number[][] = [];
 
-        for(let r = 0; r < 2*Math.PI;r+=Math.PI/8) {
-            t.push(new Point(100 * Math.cos(r), 100 * Math.sin(r)));
+        for(let r = 0; r < 2*Math.PI;r+=Math.PI/64) {
+            t.push([5000 * Math.cos(r), 5000 * Math.sin(r)]);
         }
 
         let p = new Planetoid(t);
@@ -52,13 +54,14 @@ export class GameClient extends PIXI.Application implements IOnRender, IOnFixedU
 
         let ship = this.b = new Ship();
         this.world.addBody(ship);
+        this.world.addBody(p);
         
         let s = new ShipDisplay(ship);
         this.stage.addChild(s);
 
         this.t = s;
 
-        ship.position = [0, -120];
+        ship.position = [0, -5050];
 
         this.onRenderers.push(s);
     }
@@ -69,7 +72,7 @@ export class GameClient extends PIXI.Application implements IOnRender, IOnFixedU
         this.stage.position.set(this.renderer.width/2, this.renderer.height/2);
         
         // zoom
-        this.stage.scale.set(2);
+        this.stage.scale.set(0.25);
     }
 
     onFixedUpdate(dt: number): void {
@@ -85,9 +88,9 @@ export class GameClient extends PIXI.Application implements IOnRender, IOnFixedU
             this.b.angle += dt * 4;
         }
 
-        let _mass = 100000;
+        let _mass = 1000000000;
 
-        let mag = _mass/vec2.sqrLen(this.b.position);
+        let mag = _mass/vec2.squaredLength(this.b.position);
         let grav = [0, 0];
 
         vec2.normalize(grav, this.b.position);

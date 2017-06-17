@@ -12,28 +12,17 @@ export class PlanetoidDisplay extends PIXI.Graphics {
         this.planetoid = planetoid;
         let graphics = this;
 
-        // both arrays are sourced from planetoid.TerrainPoints
         let pPoints : PIXI.Point[] = [];
 
         for(let p of planetoid.TerrainPoints) {
-            pPoints.push(new PIXI.Point(p.X, p.Y));
+            pPoints.push(new PIXI.Point(p[0], p[1]));
         }
         pPoints.push(pPoints[0]);
 
         graphics.lineStyle(8, 0x888888);
+        graphics.beginFill(0x444444);
         graphics.drawPolygon(pPoints);
-
-        let pointPairs : number[][] = []; // array of points, [[0, 0], [1, 1], ...]
-        for(let p of planetoid.TerrainPoints) {
-            pointPairs.push([p.X, p.Y]);
-        }
-
-        // game.physics.p2.enable(this, true);
-        // this.body.clearShapes();
-        // this.body.data.adjustCenterOfMass = function() {}
-        // this.body.addPolygon(null, pointPairs);
-
-        // this.addChild(graphics);
+        graphics.endFill();
     }
 }
 
@@ -49,11 +38,14 @@ export class ShipDisplay extends PIXI.Graphics implements IOnRender {
         let poly = [
             -8, 8,
             0, -8,
-            8, 8
+            8, 8,
+            -8, 8
         ];
 
         g.lineStyle(1, 0xDDDDDD);
+        g.beginFill(0x884422);
         g.drawPolygon(poly);
+        g.endFill();
     }
 
     onRender(dt: number): void {
