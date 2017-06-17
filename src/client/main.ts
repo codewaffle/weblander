@@ -83,6 +83,7 @@ export class GameClient extends PIXI.Application implements IOnRender, IOnFixedU
         this.create();
 
         let lastTime : number = null;
+        let clockOffset : number = null;
 
         let fixedRate = 1/20;
 
@@ -96,9 +97,14 @@ export class GameClient extends PIXI.Application implements IOnRender, IOnFixedU
 
         this.gameloop = (t : number) => {
             requestAnimationFrame(this.gameloop);
+
+            if (lastTime === null) {
+                clockOffset = Date.now() - t;
+            }
+
             let dt = lastTime ? (t - lastTime) / 1000 : 0;
 
-            this.world.step(fixedRate, dt, 10);
+            this.world.step(fixedRate, dt, 20);
 
             for(var obj of this.onRenderers) {
                 obj.onRender(dt);
@@ -109,6 +115,25 @@ export class GameClient extends PIXI.Application implements IOnRender, IOnFixedU
             lastTime = t;
         }
 
+        // keep moving things along if out of focus
+        let idleGameloop = () => {
+            setTimeout(idleGameloop, 200);
+
+            let curTime = Date.now() - clockOffset;
+            let elapsed = (curTime - lastTime) / 1000;
+
+            if(elapsed > 0.5) {
+                this.world.step(fixedRate, 0.5, 20);
+                lastTime += 500; // ms
+            }
+
+            console.log(curTime, lastTime, elapsed, clockOffset);
+
+        }
+
         this.gameloop(0);
+        setTimeout(idleGameloop, 200);
+
+        
     }
 }
